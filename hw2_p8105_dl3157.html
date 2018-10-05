@@ -182,10 +182,23 @@ nrow(a_ada)</code></pre>
 <div id="problem-2" class="section level2">
 <h2>Problem 2</h2>
 <pre class="r"><code>library(readxl)
-p2_trash = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = 'Mr. Trash Wheel',range = cell_cols(&quot;A:N&quot;)) %&gt;%
+trash = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = 'Mr. Trash Wheel',range = cell_cols(&quot;A:N&quot;)) %&gt;%
 janitor::clean_names() %&gt;%
 filter(!is.na(date)) %&gt;%
-mutate(sports_balls=as.integer(signif(sports_balls)))</code></pre>
+mutate(sports_balls = as.integer(signif(sports_balls)))</code></pre>
+<pre class="r"><code>library(readxl)
+trash_16 = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = '2016 Precipitation',range = cell_rows(2:14)) %&gt;%
+janitor::clean_names() %&gt;%
+mutate(year = 2016)
+
+trash_17 = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = '2017 Precipitation',range = cell_rows(2:10)) %&gt;%
+janitor::clean_names() %&gt;%
+mutate(year = 2017)
+
+trash_1617 = bind_rows(trash_16,trash_17) %&gt;%
+janitor::clean_names() %&gt;%
+select(year, everything()) %&gt;%
+mutate(month = month.name[month])</code></pre>
 </div>
 </div>
 

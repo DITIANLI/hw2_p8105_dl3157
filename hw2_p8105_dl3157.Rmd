@@ -61,9 +61,24 @@ nrow(a_ada)
 ##Problem 2
 ```{r 21}
 library(readxl)
-p2_trash = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = 'Mr. Trash Wheel',range = cell_cols("A:N")) %>%
+trash = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = 'Mr. Trash Wheel',range = cell_cols("A:N")) %>%
 janitor::clean_names() %>%
 filter(!is.na(date)) %>%
-mutate(sports_balls=as.integer(signif(sports_balls)))
+mutate(sports_balls = as.integer(signif(sports_balls)))
 ```
 
+```{r 22}
+library(readxl)
+trash_16 = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = '2016 Precipitation',range = cell_rows(2:14)) %>%
+janitor::clean_names() %>%
+mutate(year = 2016)
+
+trash_17 = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = '2017 Precipitation',range = cell_rows(2:10)) %>%
+janitor::clean_names() %>%
+mutate(year = 2017)
+
+trash_1617 = bind_rows(trash_16,trash_17) %>%
+janitor::clean_names() %>%
+select(year, everything()) %>%
+mutate(month = month.name[month])
+```
