@@ -29,7 +29,7 @@ nyc_trans = read_csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>%
 
 This dataset contains line, station name, station latitude, station longtitude, entry, vending, entry type, ada, route_name and route_number. 
 I first cleaned variable names, then we used mutate to convert variable type and used gather for route variables. After that I used separated function to get route and route line name, then arranged the data.
-Then dimension is `r nrow(nyc_trans)` by `r ncol(nyc_trans)`. The data is not tidy enough, because we have too many columns to show in one row.
+Then dimension is `r nrow(nyc_trans)` by `r ncol(nyc_trans)`, and we got tidy data for further analysis.
 
 ```{r 12}
 distinct_stations = nrow(distinct(nyc_trans,station_name,line,.keep_all = TRUE))
