@@ -49,20 +49,21 @@ proportion
 
 ```{r 13}
 a_train = nyc_trans %>%
- filter(route_name == 'A') %>%
+ filter(route_line == 'A') %>%
  distinct(station_name,line)
 nrow(a_train)
-
 a_ada = nyc_trans %>%
- filter(route_name == 'A' & ada == TRUE) %>%
+ filter(route_line == 'A' & ada == TRUE) %>%
  distinct(station_name,line)
 nrow(a_ada)
 ```
 
 ##Problem 2
 ```{r 21}
-p2_trash = read_excel(path = './data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',sheet = 'Mr. Trash Wheel',range = cell_cols("A:N"))%>%
-janitor::clean_names()%>%
-filter(!is.na(date))%>%
+library(readxl)
+p2_trash = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = 'Mr. Trash Wheel',range = cell_cols("A:N")) %>%
+janitor::clean_names() %>%
+filter(!is.na(date)) %>%
 mutate(sports_balls=as.integer(signif(sports_balls)))
 ```
+
