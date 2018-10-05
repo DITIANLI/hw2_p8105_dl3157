@@ -200,6 +200,22 @@ janitor::clean_names() %&gt;%
 select(year, everything()) %&gt;%
 mutate(month = month.name[month])</code></pre>
 </div>
+<div id="problem-3" class="section level2">
+<h2>Problem 3</h2>
+<pre class="r"><code>devtools::install_github(&quot;p8105/p8105.datasets&quot;)</code></pre>
+<pre><code>## Skipping install of 'p8105.datasets' from a github remote, the SHA1 (21f5ad1c) has not changed since last install.
+##   Use `force = TRUE` to force installation</code></pre>
+<pre class="r"><code>library(p8105.datasets)
+brfss_sm = brfss_smart2010 %&gt;%
+janitor::clean_names() %&gt;%
+separate(locationdesc, into = c(&quot;state&quot;, &quot;county&quot;), sep = &quot; - &quot;) %&gt;%
+filter(topic == 'Overall Health') %&gt;%
+select(-class,-topic,-question,-sample_size,-locationabbr,-(confidence_limit_low:geo_location)) %&gt;%
+spread(key = response, value = data_value) %&gt;%
+janitor::clean_names() %&gt;%
+select(year,state,county,excellent,very_good,good,fair,poor) %&gt;%
+mutate(above_good = excellent + very_good)</code></pre>
+</div>
 </div>
 
 
