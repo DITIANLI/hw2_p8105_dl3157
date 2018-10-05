@@ -27,38 +27,47 @@ nyc_trans = read_csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>%
 
 ```
 
-This dataset contains line, station name, station latitude, station longtitude, entry, vending, entry type, ada, route_name and route_number. We first cleaned variable names, then we used mutate to convert variable type and used gather for route variables. Then dimension is `r nrow(nyc_trans)` by `r ncol(nyc_trans)`. The data is not tidy enough, because we have too many columns to show in one row.
+This dataset contains line, station name, station latitude, station longtitude, entry, vending, entry type, ada, route_name and route_number. 
+I first cleaned variable names, then we used mutate to convert variable type and used gather for route variables. After that I used separated function to get route and route line name, then arranged the data.
+Then dimension is `r nrow(nyc_trans)` by `r ncol(nyc_trans)`. The data is not tidy enough, because we have too many columns to show in one row.
 
 ```{r 12}
 distinct_stations = nrow(distinct(nyc_trans,station_name,line,.keep_all = TRUE))
+distinct_stations
+
 ada_compliance = nyc_trans %>%
- filter(ada == TRUE) %>%
- distinct(station_name,line)
- nrow(ada_compliance)
+filter(ada == TRUE) %>%
+distinct(station_name,line)
+nrow(ada_compliance)
 
 allow_entrance = nyc_trans %>%
- filter(entry == TRUE & vending == 'NO') %>%
- distinct(line,station_name)
- vending = nyc_trans %>%
- filter(vending == 'NO') %>%
- distinct(line,station_name)
- proportion = nrow(allow_entrance)/nrow(vending)
+filter(entry == TRUE & vending == 'NO') %>%
+distinct(line,station_name)
+vending = nyc_trans %>%
+filter(vending == 'NO') %>%
+distinct(line,station_name)
+proportion = nrow(allow_entrance)/nrow(vending)
 proportion
   
 ```
 
+We have 465 distinct stations, ADA compliant are 84 and there are 43% station entrances / exits without vending allow entrance.
+
 ```{r 13}
 a_train = nyc_trans %>%
- filter(route_line == 'A') %>%
- distinct(station_name,line)
+filter(route_line == 'A') %>%
+distinct(station_name,line)
 nrow(a_train)
 a_ada = nyc_trans %>%
- filter(route_line == 'A' & ada == TRUE) %>%
- distinct(station_name,line)
+filter(route_line == 'A' & ada == TRUE) %>%
+distinct(station_name,line)
 nrow(a_ada)
 ```
 
+There are 60 distinct stations serve the A; 17 stations are ADA compliant.
+
 ##Problem 2
+
 ```{r 21}
 library(readxl)
 trash = read_excel(path = './data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',sheet = 'Mr. Trash Wheel',range = cell_cols("A:N")) %>%
@@ -82,6 +91,11 @@ janitor::clean_names() %>%
 select(year, everything()) %>%
 mutate(month = month.name[month])
 ```
+
+Mr. Trash Wheel has `r nrow(trash)` observations,key variable is weight_tons;the 2016-2017 dataset precipitation has `r nrow(trash_1617)` observations, the key variable is total precipitation for each month.
+
+The total precipitation in 2017 is `r sum(trash_17$total)`;
+the median number of sports balls in a dumpster in 2016 is `r trash %>% filter(year==2016,!is.na(sports_balls)) %>% pull(sports_balls) %>% median()`.
 
 ## Problem 3
 ```{r 31}
@@ -128,3 +142,6 @@ labs(title = 'Excellent response in 2 counties',
 x = 'Proportion of Excellent')
 
 ```
+
+There are 404 distinct locations, every state is represented, NJ is the most.
+In 2002,  the median of the “Excellent” response value is 23.6.
