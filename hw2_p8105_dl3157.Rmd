@@ -99,3 +99,32 @@ mutate(above_good = excellent + very_good)
 
 
 ```
+
+```{r 32}
+nrow(distinct(brfss_sm,state,county))
+nrow(distinct(brfss_sm,state))
+
+count(brfss_sm,state) %>%
+arrange(-n) %>%
+head(1)
+
+brfss_sm %>%
+filter(year == 2002, !is.na(excellent)) %>%
+pull(excellent) %>%
+median()
+
+brfss_sm %>%
+filter(year == 2002) %>%
+ggplot(aes(x = excellent)) +
+geom_histogram() +
+labs(title = '"Excellent" response values in 2002',
+x = 'Proportion of "Excellent"')
+
+brfss_sm %>%
+filter(county == 'New York County' | county == 'Queens County') %>%
+ggplot(aes(x = year, y = excellent)) +
+geom_point(aes(color = county)) +
+labs(title = 'Excellent response in 2 counties',
+x = 'Proportion of Excellent')
+
+```
